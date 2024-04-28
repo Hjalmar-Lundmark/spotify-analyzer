@@ -52,11 +52,12 @@ async function fetchTracks() {
     }
 
     console.log(tracks)
+    let total = 0
     tracks.forEach(item => {
-        
+        total += parseInt(item.album.release_date.split("-")[0])
     });
-    
-
+    average.value = (total / tracks.length).toFixed(2)
+    console.log(average.value)
 }
 
 
@@ -65,6 +66,7 @@ async function fetchTracks() {
 <template>
     <input type="text" id="playlist">
     <button v-on:click="fetchTracks">Send</button>
+    <p>{{ average }}</p>
 </template>
 
 <style scoped>
