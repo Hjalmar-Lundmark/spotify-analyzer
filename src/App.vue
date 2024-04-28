@@ -30,6 +30,7 @@ function fetchToken() {
 async function fetchTracks() {
     const url = document.getElementById('playlist').value
     const playlist_id = url.split('/')[4]
+    const tracks
     console.log(playlist_id)
 
   const response = await fetch(`https://api.spotify.com/v1/playlists/${playlist_id}/tracks`, {
@@ -39,9 +40,10 @@ async function fetchTracks() {
   })
     .then(response => response.json())
     .then(data => {
-      console.log(data)
-        playlist.value = data.items
+      console.log(data.tracks)
+        tracks = data.tracks
     })
+
 
 
 }
