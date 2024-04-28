@@ -12,7 +12,6 @@ onMounted(() => {
 function fetchToken() {
     const client_id = import.meta.env.VITE_CLIENT_ID
     const client_secret = import.meta.env.VITE_CLIENT_SECRET
-    console.log(client_id, client_secret)
 
     fetch("https://accounts.spotify.com/api/token", {
         method: "POST",
@@ -32,7 +31,6 @@ async function fetchTracks() {
     const url = document.getElementById("playlist").value
     const playlist_id = url.split("/")[4]
     let tracks = []
-    console.log(playlist_id)
     let nextUrl = `https://api.spotify.com/v1/playlists/${playlist_id}/tracks`
 
     while (nextUrl !== null) {
@@ -43,7 +41,6 @@ async function fetchTracks() {
         })
         .then(response => response.json())
         .then(data => {
-            console.log(data)
             data.items.forEach(element => {
                 tracks.push(element.track)
             });
@@ -51,13 +48,11 @@ async function fetchTracks() {
         })
     }
 
-    console.log(tracks)
     let total = 0
     tracks.forEach(item => {
         total += parseInt(item.album.release_date.split("-")[0])
     });
     average.value = (total / tracks.length).toFixed(2)
-    console.log(average.value)
 }
 
 
