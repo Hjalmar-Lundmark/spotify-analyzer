@@ -59,22 +59,30 @@ async function fetchTracks() {
 </script>
 
 <template>
-    <input type="text" id="playlist">
+    <input type="text" id="playlist" placeholder="Drop spotify playlist url here">
     <button v-on:click="fetchTracks">Send</button>
-    <p>{{ average }}</p>
+    <p>Average release date: {{ average }}</p>
 </template>
 
 <style scoped>
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.vue:hover {
-  filter: drop-shadow(0 0 2em #42b883aa);
-}
+    button {
+        background-color: #4CAF50;
+        border: none;
+        color: white;
+        padding: 15px 32px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+    }
+
+    input {
+        padding: 10px;
+        font-size: 16px;
+        width: 40vw;
+    }
+    
+    p {
+        font-size: 16px;
+    }
 </style>
