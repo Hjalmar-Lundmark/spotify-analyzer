@@ -1,19 +1,19 @@
 <script setup>
 import { onMounted, ref } from "vue"
 
-const playlist = ref([])
 const average = ref(0)
 const token = ref("")
+let tokenTimer
 
 onMounted(() => {
     fetchToken()
 })
 
-function fetchToken() {
+async function fetchToken() {
     const client_id = import.meta.env.VITE_CLIENT_ID
     const client_secret = import.meta.env.VITE_CLIENT_SECRET
 
-    fetch("https://accounts.spotify.com/api/token", {
+    await fetch("https://accounts.spotify.com/api/token", {
         method: "POST",
         headers: {
             "Content-Type": "application/x-www-form-urlencoded",
@@ -23,6 +23,7 @@ function fetchToken() {
     .then(response => response.json())
     .then(data => {
         token.value = data.access_token
+        tokenTimer = new Date()
     })
 }
 
@@ -32,8 +33,12 @@ async function fetchTracks() {
     let tracks = []
     let nextUrl = `https://api.spotify.com/v1/playlists/${playlist_id}/tracks`
 
+    if (new Date() - tokenTimer > 600000) {
+        await fetchToken()
+    }
+
     while (nextUrl !== null) {
-        const response = await fetch(nextUrl, {
+        await fetch(nextUrl, {
             headers: {
                 Authorization: `Bearer ${token.value}`
             }
