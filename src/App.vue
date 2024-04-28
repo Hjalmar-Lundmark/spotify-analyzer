@@ -1,17 +1,50 @@
 <script setup>
-import HelloWorld from './components/HelloWorld.vue'
+import { onMounted, ref } from 'vue'
+
+const playlists = ref([])
+const average = ref(0)
+const token = ref('')
+
+onMounted(() => {
+  fetchToken()
+})
+
+function fetchToken() {
+    const client_id = import.meta.env.VITE_CLIENT_ID
+    const client_secret = import.meta.env.VITE_CLIENT_SECRET
+    console.log(client_id, client_secret)
+
+  fetch('https://accounts.spotify.com/api/token', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+    },
+    body: `grant_type=client_credentials&client_id=${client_id}&client_secret=${client_secret}`
+  }).then(response => response.json())
+    .then(data => {
+      console.log(data)
+        token.value = data.access_token
+    })
+}
+
+async function fetchPlaylists() {
+    const url = document.getElementById('playlist').value
+    const playlist_id = url.split('/')[4]
+    console.log(playlist_id)
+
+  const response = await fetch(`https://api.spotify.com/v1/playlists/${playlist_id}/tracks`, {
+    headers: {
+        Authorization: `Bearer ${token.value}`
+    }
+  })
+}
+
+
 </script>
 
 <template>
-  <div>
-    <a href="https://vitejs.dev" target="_blank">
-      <img src="/vite.svg" class="logo" alt="Vite logo" />
-    </a>
-    <a href="https://vuejs.org/" target="_blank">
-      <img src="./assets/vue.svg" class="logo vue" alt="Vue logo" />
-    </a>
-  </div>
-  <HelloWorld msg="Vite + Vue" />
+    <input type="text" id="playlist">
+    <button v-on:click="fetchPlaylists">Send</button>
 </template>
 
 <style scoped>
