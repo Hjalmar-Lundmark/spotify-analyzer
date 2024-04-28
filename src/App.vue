@@ -1,12 +1,12 @@
 <script setup>
-import { onMounted, ref } from 'vue'
+import { onMounted, ref } from "vue"
 
 const playlist = ref([])
 const average = ref(0)
-const token = ref('')
+const token = ref("")
 
 onMounted(() => {
-  fetchToken()
+    fetchToken()
 })
 
 function fetchToken() {
@@ -14,37 +14,48 @@ function fetchToken() {
     const client_secret = import.meta.env.VITE_CLIENT_SECRET
     console.log(client_id, client_secret)
 
-  fetch('https://accounts.spotify.com/api/token', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded',
-    },
-    body: `grant_type=client_credentials&client_id=${client_id}&client_secret=${client_secret}`
-  }).then(response => response.json())
+    fetch("https://accounts.spotify.com/api/token", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+        },
+        body: `grant_type=client_credentials&client_id=${client_id}&client_secret=${client_secret}`
+    })
+    .then(response => response.json())
     .then(data => {
-      console.log(data)
+        console.log(data)
         token.value = data.access_token
     })
 }
 
 async function fetchTracks() {
-    const url = document.getElementById('playlist').value
-    const playlist_id = url.split('/')[4]
-    const tracks
+    const url = document.getElementById("playlist").value
+    const playlist_id = url.split("/")[4]
+    let tracks = []
     console.log(playlist_id)
+    let nextUrl = `https://api.spotify.com/v1/playlists/${playlist_id}/tracks`
 
-  const response = await fetch(`https://api.spotify.com/v1/playlists/${playlist_id}/tracks`, {
-    headers: {
-        Authorization: `Bearer ${token.value}`
+    while (nextUrl !== null) {
+        const response = await fetch(nextUrl, {
+            headers: {
+                Authorization: `Bearer ${token.value}`
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log(data)
+            data.items.forEach(element => {
+                tracks.push(element.track)
+            });
+            nextUrl = data.next
+        })
     }
-  })
-    .then(response => response.json())
-    .then(data => {
-      console.log(data.tracks)
-        tracks = data.tracks
-    })
 
-
+    console.log(tracks)
+    tracks.forEach(item => {
+        
+    });
+    
 
 }
 
