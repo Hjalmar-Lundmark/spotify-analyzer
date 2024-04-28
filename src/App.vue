@@ -22,14 +22,13 @@ function fetchToken() {
     })
     .then(response => response.json())
     .then(data => {
-        console.log(data)
         token.value = data.access_token
     })
 }
 
 async function fetchTracks() {
     const url = document.getElementById("playlist").value
-    const playlist_id = url.split("/")[4]
+    const playlist_id = url.split("/")[4].split("?")[0]
     let tracks = []
     let nextUrl = `https://api.spotify.com/v1/playlists/${playlist_id}/tracks`
 
@@ -41,6 +40,7 @@ async function fetchTracks() {
         })
         .then(response => response.json())
         .then(data => {
+            console.log(data)
             data.items.forEach(element => {
                 tracks.push(element.track)
             });
