@@ -45,7 +45,6 @@ async function fetchTracks() {
         })
         .then(response => response.json())
         .then(data => {
-            console.log(data)
             data.items.forEach(element => {
                 tracks.push(element.track)
             });
