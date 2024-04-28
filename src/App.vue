@@ -1,7 +1,7 @@
 <script setup>
 import { onMounted, ref } from 'vue'
 
-const playlists = ref([])
+const playlist = ref([])
 const average = ref(0)
 const token = ref('')
 
@@ -27,7 +27,7 @@ function fetchToken() {
     })
 }
 
-async function fetchPlaylists() {
+async function fetchTracks() {
     const url = document.getElementById('playlist').value
     const playlist_id = url.split('/')[4]
     console.log(playlist_id)
@@ -37,6 +37,13 @@ async function fetchPlaylists() {
         Authorization: `Bearer ${token.value}`
     }
   })
+    .then(response => response.json())
+    .then(data => {
+      console.log(data)
+        playlist.value = data.items
+    })
+
+
 }
 
 
@@ -44,7 +51,7 @@ async function fetchPlaylists() {
 
 <template>
     <input type="text" id="playlist">
-    <button v-on:click="fetchPlaylists">Send</button>
+    <button v-on:click="fetchTracks">Send</button>
 </template>
 
 <style scoped>
