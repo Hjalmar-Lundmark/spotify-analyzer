@@ -56,7 +56,7 @@ async function fetchTracks() {
     tracks.forEach(item => {
         total += parseInt(item.album.release_date.split("-")[0])
     });
-    average.value = (total / tracks.length).toFixed(2)
+    average.value = Math.floor(total / tracks.length)
 }
 
 
