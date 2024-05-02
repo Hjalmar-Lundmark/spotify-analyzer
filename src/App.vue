@@ -75,6 +75,8 @@ async function fetchTracks() {
 </script>
 
 <template>
+    <h1>Spotify Playlist Analyzer</h1>
+    <p>Enter a Spotify playlist URL to analyze the release dates of the songs.</p>
     <input type="text" id="playlist" placeholder="Drop spotify playlist url here">
     <button v-on:click="fetchTracks">Send</button>
     <p>Average release date: {{ average }}</p>
