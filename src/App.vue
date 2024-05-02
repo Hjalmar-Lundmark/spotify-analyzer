@@ -4,6 +4,7 @@ import { onMounted, ref } from "vue"
 const average = ref(0)
 const token = ref("")
 let tokenTimer
+const decades = ref([])
 
 onMounted(() => {
     fetchToken()
@@ -54,7 +55,16 @@ async function fetchTracks() {
 
     let total = 0
     tracks.forEach(item => {
-        total += parseInt(item.album.release_date.split("-")[0])
+        let releaseYear = parseInt(item.album.release_date.split("-")[0])
+        total += releaseYear
+        
+        let decade = Math.floor(releaseYear / 10) * 10
+        let index = decades.value.findIndex(x => x.decade === `${decade}s`)
+        if (index === -1) {
+            decades.push({decade: `${decade}s`, count: 1})
+        } else {
+            decades[index].count++
+        }
     });
     average.value = Math.floor(total / tracks.length)
 }
@@ -66,6 +76,10 @@ async function fetchTracks() {
     <input type="text" id="playlist" placeholder="Drop spotify playlist url here">
     <button v-on:click="fetchTracks">Send</button>
     <p>Average release date: {{ average }}</p>
+    <p>Decades:</p>
+    <ul>
+        <li v-for="decade in decades">{{ decade.decade }}: {{ decade.count }}</li>
+    </ul>
 </template>
 
 <style scoped>
