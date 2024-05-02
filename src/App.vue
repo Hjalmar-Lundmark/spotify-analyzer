@@ -83,7 +83,7 @@ async function fetchTracks() {
     </ul>
 </template>
 
-<style scoped>
+<style>
     button {
         background-color: #4CAF50;
         border: none;
@@ -103,5 +103,12 @@ async function fetchTracks() {
     
     p {
         font-size: 16px;
+        margin-bottom: 0;
+    }
+
+    ul {
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
     }
 </style>
