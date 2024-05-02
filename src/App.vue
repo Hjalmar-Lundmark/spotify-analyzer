@@ -61,11 +61,12 @@ async function fetchTracks() {
         let decade = Math.floor(releaseYear / 10) * 10
         let index = decades.value.findIndex(x => x.decade === `${decade}s`)
         if (index === -1) {
-            decades.push({decade: `${decade}s`, count: 1})
+            decades.value.push({decade: `${decade}s`, count: 1})
         } else {
-            decades[index].count++
+            decades.value[index].count++
         }
     });
+    decades.value.sort((a, b) => parseInt(b.decade) - parseInt(a.decade))
     average.value = Math.floor(total / tracks.length)
 }
 
