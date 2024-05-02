@@ -76,7 +76,7 @@ async function fetchTracks() {
     <input type="text" id="playlist" placeholder="Drop spotify playlist url here">
     <button v-on:click="fetchTracks">Send</button>
     <p>Average release date: {{ average }}</p>
-    <p>Decades:</p>
+    <p>Most common decades:</p>
     <ul>
         <li v-for="decade in decades">{{ decade.decade }}: {{ decade.count }}</li>
     </ul>
