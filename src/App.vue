@@ -54,6 +54,7 @@ async function fetchTracks() {
     }
 
     let total = 0
+    decades.value = []
     tracks.forEach(item => {
         let releaseYear = parseInt(item.album.release_date.split("-")[0])
         total += releaseYear
@@ -77,7 +78,7 @@ async function fetchTracks() {
     <input type="text" id="playlist" placeholder="Drop spotify playlist url here">
     <button v-on:click="fetchTracks">Send</button>
     <p>Average release date: {{ average }}</p>
-    <p>Most common decades:</p>
+    <p>Most common decades by song count:</p>
     <ul>
         <li v-for="decade in decades">{{ decade.decade }}: {{ decade.count }}</li>
     </ul>
