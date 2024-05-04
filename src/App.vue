@@ -55,6 +55,7 @@ async function fetchTracks() {
 
     let total = 0
     decades.value = []
+    tracks = tracks.filter(item => item.album.release_date !== null)
     tracks.forEach(item => {
         let releaseYear = parseInt(item.album.release_date.split("-")[0])
         total += releaseYear
