@@ -2,6 +2,7 @@
 import { onMounted, ref } from "vue"
 
 const average = ref(0)
+const averageDuration = ref(0)
 const token = ref("")
 let tokenTimer
 const decades = ref([])
@@ -21,11 +22,11 @@ async function fetchToken() {
         },
         body: `grant_type=client_credentials&client_id=${client_id}&client_secret=${client_secret}`
     })
-    .then(response => response.json())
-    .then(data => {
-        token.value = data.access_token
-        tokenTimer = new Date()
-    })
+        .then(response => response.json())
+        .then(data => {
+            token.value = data.access_token
+            tokenTimer = new Date()
+        })
 }
 
 async function fetchTracks() {
@@ -44,13 +45,13 @@ async function fetchTracks() {
                 Authorization: `Bearer ${token.value}`
             }
         })
-        .then(response => response.json())
-        .then(data => {
-            data.items.forEach(element => {
-                tracks.push(element.track)
-            });
-            nextUrl = data.next
-        })
+            .then(response => response.json())
+            .then(data => {
+                data.items.forEach(element => {
+                    tracks.push(element.track)
+                });
+                nextUrl = data.next
+            })
     }
 
     let total = 0
@@ -58,17 +59,20 @@ async function fetchTracks() {
     tracks.forEach(item => {
         let releaseYear = parseInt(item.album.release_date.split("-")[0])
         total += releaseYear
-        
+
+        averageDuration.value += item.duration_ms
+
         let decade = Math.floor(releaseYear / 10) * 10
         let index = decades.value.findIndex(x => x.decade === `${decade}s`)
         if (index === -1) {
-            decades.value.push({decade: `${decade}s`, count: 1})
+            decades.value.push({ decade: `${decade}s`, count: 1 })
         } else {
             decades.value[index].count++
         }
     });
     decades.value.sort((a, b) => parseInt(b.decade) - parseInt(a.decade))
     average.value = Math.floor(total / tracks.length)
+    averageDuration.value = Math.floor(averageDuration.value / tracks.length) / 1000
 }
 
 
@@ -79,6 +83,10 @@ async function fetchTracks() {
     <p>Enter a Spotify playlist URL to analyze the release dates of the songs.</p>
     <input type="text" id="playlist" placeholder="Drop spotify playlist url here">
     <button v-on:click="fetchTracks">Send</button>
+    <p>
+        Average duration: {{ Math.floor(averageDuration / 60) }}min
+        {{ Math.floor(averageDuration - (Math.floor(averageDuration / 60) * 60)) }}sec
+    </p>
     <p>Average release date: {{ average }}</p>
     <p>Most common decades by song count:</p>
     <ul>
@@ -87,31 +95,31 @@ async function fetchTracks() {
 </template>
 
 <style>
-    button {
-        background-color: #4CAF50;
-        border: none;
-        color: white;
-        padding: 15px 32px;
-        text-align: center;
-        text-decoration: none;
-        display: inline-block;
-        font-size: 16px;
-    }
+button {
+    background-color: #4CAF50;
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+}
 
-    input {
-        padding: 10px;
-        font-size: 16px;
-        width: 40vw;
-    }
-    
-    p {
-        font-size: 16px;
-        margin-bottom: 0;
-    }
+input {
+    padding: 10px;
+    font-size: 16px;
+    width: 40vw;
+}
 
-    ul {
-        list-style-type: none;
-        padding: 0;
-        margin: 0;
-    }
+p {
+    font-size: 16px;
+    margin-bottom: 0;
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
 </style>
