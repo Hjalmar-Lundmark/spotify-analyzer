@@ -2,6 +2,7 @@
 import { onMounted, ref } from "vue"
 
 const average = ref(0)
+const median = ref(0)
 const averageDuration = ref(0)
 const token = ref("")
 let tokenTimer
@@ -55,11 +56,14 @@ async function fetchTracks() {
     }
 
     let total = 0
+    let releaseDates = []
     decades.value = []
     tracks = tracks.filter(item => item.album.release_date !== null)
     tracks.forEach(item => {
         let releaseYear = parseInt(item.album.release_date.split("-")[0])
         total += releaseYear
+
+        releaseDates.push(releaseYear)
 
         averageDuration.value += item.duration_ms
 
@@ -72,7 +76,10 @@ async function fetchTracks() {
         }
     });
     decades.value.sort((a, b) => parseInt(b.decade) - parseInt(a.decade))
+    releaseDates.sort((a, b) => a - b)
+
     average.value = Math.floor(total / tracks.length)
+    median.value = releaseDates[Math.floor(releaseDates.length / 2)]
     averageDuration.value = Math.floor(averageDuration.value / tracks.length) / 1000
 }
 
@@ -88,7 +95,7 @@ async function fetchTracks() {
         Average duration: {{ Math.floor(averageDuration / 60) }}min
         {{ Math.floor(averageDuration - (Math.floor(averageDuration / 60) * 60)) }}sec
     </p>
-    <p>Average release date: {{ average }}</p>
+    <p>Average (median) release date: {{ average }} ({{ median }})</p>
     <p>Most common decades by song count:</p>
     <ul>
         <li v-for="decade in decades">{{ decade.decade }}: {{ decade.count }}</li>
