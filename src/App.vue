@@ -95,7 +95,7 @@ async function fetchTracks() {
         Average duration: {{ Math.floor(averageDuration / 60) }}min
         {{ Math.floor(averageDuration - (Math.floor(averageDuration / 60) * 60)) }}sec
     </p>
-    <p>Average (median) release date: {{ average }} ({{ median }})</p>
+    <p>Average release date: {{ average }}<br>Median release date: {{ median }}</p>
     <p>Most common decades by song count:</p>
     <ul>
         <li v-for="decade in decades">{{ decade.decade }}: {{ decade.count }}</li>
