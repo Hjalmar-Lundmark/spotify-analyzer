@@ -70,9 +70,9 @@ async function fetchTracks() {
         let decade = Math.floor(releaseYear / 10) * 10
         let index = decades.value.findIndex(x => x.decade === `${decade}s`)
         if (index === -1) {
-            decades.value.push({ decade: `${decade}s`, count: 1 })
+            decades.value.push({ decade: `${decade}s`, songs: [item] })
         } else {
-            decades.value[index].count++
+            decades.value[index].songs.push(item)
         }
     });
     decades.value.sort((a, b) => parseInt(b.decade) - parseInt(a.decade))
@@ -98,7 +98,7 @@ async function fetchTracks() {
     <p>Average release date: {{ average }}<br>Median release date: {{ median }}</p>
     <p>Most common decades by song count:</p>
     <ul>
-        <li v-for="decade in decades">{{ decade.decade }}: {{ decade.count }}</li>
+        <li v-for="decade in decades">{{ decade.decade }}: {{ decade.songs.length }}</li>
     </ul>
 </template>
 
