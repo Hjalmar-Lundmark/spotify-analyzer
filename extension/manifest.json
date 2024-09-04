@@ -11,5 +11,11 @@
         "default_icon": "note.svg",
         "default_popup": "analyze.html",
         "default_title": "Spotify analyzer"
-    }
+    },
+    "content_scripts": [
+        {
+          "matches": ["*://open.spotify.com/playlist/*"],
+          "js": ["script.js"]
+        }
+      ]
 }

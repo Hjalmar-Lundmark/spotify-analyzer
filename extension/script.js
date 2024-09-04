@@ -1,11 +1,10 @@
-console.log('Hello from script.js');
+const id = window.location.pathname.split('/playlist/')[1];
+console.log(id);
 
-document.getElementById('test').innerHTML = 'Hello from script.js';
-
-document.getElementById('start').addEventListener('click', run() );
-
-function run() {
+document.getElementById('start').addEventListener('click', function() {
     console.log('run');
     console.log(window.location)
-    document.getElementById('test').innerHTML = 'running...';
-}
+    // document.getElementById('test').innerHTML = window.location.href;
+    
+
+});
