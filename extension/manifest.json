@@ -1,6 +1,6 @@
 {
     "name": "Spotify analyzer",
-    "description": "This extension will analyze your spotify playlist.",
+    "description": "This extension will analyze your spotify playlist and give some info about songs release dates.",
     "version": "1.0",
     "manifest_version": 2,
     "icons": {
