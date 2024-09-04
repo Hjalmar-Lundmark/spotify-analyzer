@@ -15,8 +15,8 @@
     },
     "content_scripts": [
         {
-          "matches": ["*://open.spotify.com/playlist/*"],
-          "js": ["script.js"]
+            "matches": ["*://open.spotify.com/playlist/*"],
+            "js": ["script.js"]
         }
-      ]
+    ]
 }
