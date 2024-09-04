@@ -42,7 +42,6 @@ document.getElementById('start').addEventListener('click', function() {
         let playlist_id = "5bkPiSmh9Z590roKMRqAld" //localStorage.getItem('playlistId');
         let tracks = []
         let nextUrl = `https://api.spotify.com/v1/playlists/${playlist_id}/tracks`
-        log.innerHTML = log.innerHTML + 'Playlist ID: ' + playlist_id + '<br>';
 
         log.innerHTML = log.innerHTML + 'Fetching tracks...<br>';
         
@@ -97,35 +96,24 @@ document.getElementById('start').addEventListener('click', function() {
 
         log.innerHTML = log.innerHTML + 'Tracks processed...<br>';
         
-        let averageP = document.createElement('p');
-        p.textContent = `Average release year: ${average}`;
-        document.getElementById('test').appendChild(averageP);
-        let medianP = document.createElement('p');
-        p.textContent = `Average release year: ${median}`;
-        document.getElementById('test').appendChild(medianP);
+        document.getElementById('average').textContent = `Average release year: ${average}`;
+        document.getElementById('median').textContent = `Median release year: ${median}`;
         
+        let decadesUl = document.createElement('ul');
         for (let i = 0; i < decades.length; i++) {
-            let decade = decades[i];
-            let decadeDiv = document.createElement('div');
-            decadeDiv.classList.add('decade');
-            let decadeP = document.createElement('p');
-            decadeP.textContent = `${decade.decade} (${decade.songs.length})`;
-            decadeDiv.appendChild(decadeP);
-            let songsDiv = document.createElement('div');
-            songsDiv.classList.add('songs');
-            decade.songs.forEach(song => {
-                let songP = document.createElement('p');
-                songP.textContent = `${song.name} - ${song.artists[0].name}`;
-                songsDiv.appendChild(songP);
-            });
-            decadeDiv.appendChild(songsDiv);
-            document.getElementById('test').appendChild(decadeDiv);
+            let decadesLi = document.createElement('li');
+            decadesLi.textContent = `${decades[i].decade}: ${decades[i].songs.length} songs`;
+            decadesUl.appendChild(decadesLi);
         }
+        document.getElementById('decades').appendChild(decadesUl);
         
-        let durationP = document.createElement('p');
-        p.textContent = `Average duration: ${averageDuration}`;
-        document.getElementById('test').appendChild(durationP);
+        let averageDurationMinutes = Math.floor(averageDuration / 60)
+        let averageDurationSeconds = Math.floor(averageDuration - (Math.floor(averageDuration / 60) * 60))
+        document.getElementById('duration').textContent = `Average duration: ${averageDurationMinutes}min ${averageDurationSeconds} seconds`;
         
+        log.innerHTML = log.innerHTML + 'Finished...<br>';
+
         document.getElementById('start').style.display = 'none';
+        log.style.display = 'none';
     }
 });
