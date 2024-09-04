@@ -14,8 +14,8 @@ document.getElementById('start').addEventListener('click', function() {
     let token = ""
     let decades = []
     
-    let client_id = import.meta.env.VITE_CLIENT_ID
-    let client_secret = import.meta.env.VITE_CLIENT_SECRET
+    let client_id = 
+    let client_secret = 
 
     log.innerHTML = log.innerHTML + 'Fetching token...<br>';
     
@@ -39,21 +39,23 @@ document.getElementById('start').addEventListener('click', function() {
     log.innerHTML = log.innerHTML + 'Between funcs...<br>';
     
     async function fetchTracks() {
-        let playlist_id = localStorage.getItem('playlistId');
+        let playlist_id = "5bkPiSmh9Z590roKMRqAld" //localStorage.getItem('playlistId');
         let tracks = []
         let nextUrl = `https://api.spotify.com/v1/playlists/${playlist_id}/tracks`
         log.innerHTML = log.innerHTML + 'Playlist ID: ' + playlist_id + '<br>';
 
         log.innerHTML = log.innerHTML + 'Fetching tracks...<br>';
-
+        
         while (nextUrl !== null) {
             await fetch(nextUrl, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
             })
-            .then(response => {log.innerHTML = log.innerHTML + JSON.stringify(response) + '<br>'; response.json()})
+            .then(response => response.json())
             .then(data => {
+                log.innerHTML = log.innerHTML + 'Data fetched...<br>';
+
                 data.items.forEach(element => {
                     tracks.push(element.track)
                 });
@@ -62,7 +64,6 @@ document.getElementById('start').addEventListener('click', function() {
             .catch(error => {
                 log.innerHTML = log.innerHTML + 'Error fetching token...<br>' + error + '<br>';
             });
-            crash()
         }
 
         log.innerHTML = log.innerHTML + 'Tracks fetched...<br>';
