@@ -9,7 +9,7 @@
     "permissions": ["activeTab"],
     "browser_action": {
         "default_icon": "note.svg",
-        "default_popup": "popup.html",
+        "default_popup": "analyze.html",
         "default_title": "Spotify analyzer"
     }
 }
