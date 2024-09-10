@@ -1,48 +1,51 @@
-// happens on load of the page
-const id = window.location.pathname.split('/playlist/')[1];
-console.log(id);
-localStorage.setItem('playlistId', id);
-
-// happens on click of the start button
 document.getElementById('start').addEventListener('click', function() {
     document.getElementById('start').textContent = 'Loading...';
     let log = document.getElementById('log');
-
+    
     let average = 0
     let median = 0
     let averageDuration = 0
     let token = ""
     let decades = []
-    
-    let client_id = 
-    let client_secret = 
 
-    log.innerHTML = log.innerHTML + 'Fetching token...<br>';
-    
-    fetch("https://accounts.spotify.com/api/token", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/x-www-form-urlencoded",
-        },
-        body: `grant_type=client_credentials&client_id=${client_id}&client_secret=${client_secret}`
-    })
-    .then(response => response.json())
-    .then(data => {
-        token = data.access_token
-        log.innerHTML = log.innerHTML + 'Token fetched...<br>';
-        fetchTracks()
-    })
-    .catch(error => {
-        log.innerHTML = log.innerHTML + 'Error fetching token...<br>' + error + '<br>';
+    let playlist_id = '';
+    browser.tabs.query({currentWindow: true, active: true})
+    .then((tabs) => {
+        log.innerHTML = log.innerHTML + JSON.stringify(tabs[0].url) + '<br>';
+        playlist_id = tabs[0].url.split('playlist/')[1].split('?')[0];
     });
 
-    log.innerHTML = log.innerHTML + 'Between funcs...<br>';
+    setTimeout(() => {
+        log.innerHTML = log.innerHTML + playlist_id + '<br>';
+        
+        let client_id = 
+        let client_secret = 
+        
+        log.innerHTML = log.innerHTML + 'Fetching token...<br>';
+        
+        fetch("https://accounts.spotify.com/api/token", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded",
+            },
+            body: `grant_type=client_credentials&client_id=${client_id}&client_secret=${client_secret}`
+        })
+        .then(response => response.json())
+        .then(data => {
+            token = data.access_token
+            log.innerHTML = log.innerHTML + 'Token fetched...<br>';
+            fetchTracks()
+        })
+        .catch(error => {
+            log.innerHTML = log.innerHTML + 'Error fetching token...<br>' + error + '<br>';
+        });
+    }, 100);
     
     async function fetchTracks() {
-        let playlist_id = "5bkPiSmh9Z590roKMRqAld" //localStorage.getItem('playlistId');
+        //let playlist_id = "5bkPiSmh9Z590roKMRqAld" //localStorage.getItem('playlistId');
         let tracks = []
         let nextUrl = `https://api.spotify.com/v1/playlists/${playlist_id}/tracks`
-
+        
         log.innerHTML = log.innerHTML + 'Fetching tracks...<br>';
         
         while (nextUrl !== null) {
@@ -54,7 +57,7 @@ document.getElementById('start').addEventListener('click', function() {
             .then(response => response.json())
             .then(data => {
                 log.innerHTML = log.innerHTML + 'Data fetched...<br>';
-
+                
                 data.items.forEach(element => {
                     tracks.push(element.track)
                 });
@@ -64,7 +67,7 @@ document.getElementById('start').addEventListener('click', function() {
                 log.innerHTML = log.innerHTML + 'Error fetching token...<br>' + error + '<br>';
             });
         }
-
+        
         log.innerHTML = log.innerHTML + 'Tracks fetched...<br>';
         
         let total = 0
@@ -93,7 +96,7 @@ document.getElementById('start').addEventListener('click', function() {
         average = Math.floor(total / tracks.length)
         median = releaseDates[Math.floor(releaseDates.length / 2)]
         averageDuration = Math.floor(averageDuration / tracks.length) / 1000
-
+        
         log.innerHTML = log.innerHTML + 'Tracks processed...<br>';
         
         document.getElementById('average').textContent = `Average release year: ${average}`;
@@ -112,7 +115,7 @@ document.getElementById('start').addEventListener('click', function() {
         document.getElementById('duration').textContent = `Average duration: ${averageDurationMinutes}min ${averageDurationSeconds} seconds`;
         
         log.innerHTML = log.innerHTML + 'Finished...<br>';
-
+        
         document.getElementById('start').style.display = 'none';
         log.style.display = 'none';
     }

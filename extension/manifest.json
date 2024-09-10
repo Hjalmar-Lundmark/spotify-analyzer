@@ -7,7 +7,7 @@
     "icons": {
         "48": "note.svg"
     },
-    "permissions": ["activeTab"],
+    "permissions": ["activeTab", "tabs"],
     "browser_action": {
         "default_icon": "note.svg",
         "default_popup": "analyze.html",
