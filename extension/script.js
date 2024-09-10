@@ -11,6 +11,7 @@ browser.tabs.query({currentWindow: true, active: true})
 
 document.getElementById('start').addEventListener('click', function() {
     document.getElementById('start').textContent = 'Loading...';
+    document.getElementById('start').disabled = true;
     let log = document.getElementById('log');
     
     let average = 0
