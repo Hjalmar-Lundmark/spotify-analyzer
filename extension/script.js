@@ -1,3 +1,14 @@
+let playlist_id = '';
+browser.tabs.query({currentWindow: true, active: true})
+.then((tabs) => {
+    if (!tabs[0].url.includes('open.spotify.com/playlist')) {
+        document.getElementById('start').style.display = 'none';
+        document.getElementById('log').textContent = 'Please open a Spotify playlist';
+    } else {
+        playlist_id = tabs[0].url.split('playlist/')[1].split('?')[0];
+    }
+});
+
 document.getElementById('start').addEventListener('click', function() {
     document.getElementById('start').textContent = 'Loading...';
     let log = document.getElementById('log');
@@ -8,35 +19,27 @@ document.getElementById('start').addEventListener('click', function() {
     let token = ""
     let decades = []
 
-    let playlist_id = '';
-    browser.tabs.query({currentWindow: true, active: true})
-    .then((tabs) => {
-        playlist_id = tabs[0].url.split('playlist/')[1].split('?')[0];
+    let client_id = 
+    let client_secret = 
+    
+    log.innerHTML = log.innerHTML + 'Fetching token...<br>';
+    
+    fetch("https://accounts.spotify.com/api/token", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+        },
+        body: `grant_type=client_credentials&client_id=${client_id}&client_secret=${client_secret}`
+    })
+    .then(response => response.json())
+    .then(data => {
+        token = data.access_token
+        log.innerHTML = log.innerHTML + 'Token fetched...<br>';
+        fetchTracks()
+    })
+    .catch(error => {
+        log.innerHTML = log.innerHTML + 'Error fetching token...<br>' + error + '<br>';
     });
-
-    setTimeout(() => {        
-        let client_id = 
-        let client_secret = 
-        
-        log.innerHTML = log.innerHTML + 'Fetching token...<br>';
-        
-        fetch("https://accounts.spotify.com/api/token", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/x-www-form-urlencoded",
-            },
-            body: `grant_type=client_credentials&client_id=${client_id}&client_secret=${client_secret}`
-        })
-        .then(response => response.json())
-        .then(data => {
-            token = data.access_token
-            log.innerHTML = log.innerHTML + 'Token fetched...<br>';
-            fetchTracks()
-        })
-        .catch(error => {
-            log.innerHTML = log.innerHTML + 'Error fetching token...<br>' + error + '<br>';
-        });
-    }, 100);
     
     async function fetchTracks() {
         //let playlist_id = "5bkPiSmh9Z590roKMRqAld" //localStorage.getItem('playlistId');
