@@ -11,13 +11,10 @@ document.getElementById('start').addEventListener('click', function() {
     let playlist_id = '';
     browser.tabs.query({currentWindow: true, active: true})
     .then((tabs) => {
-        log.innerHTML = log.innerHTML + JSON.stringify(tabs[0].url) + '<br>';
         playlist_id = tabs[0].url.split('playlist/')[1].split('?')[0];
     });
 
-    setTimeout(() => {
-        log.innerHTML = log.innerHTML + playlist_id + '<br>';
-        
+    setTimeout(() => {        
         let client_id = 
         let client_secret = 
         
@@ -56,7 +53,7 @@ document.getElementById('start').addEventListener('click', function() {
             })
             .then(response => response.json())
             .then(data => {
-                log.innerHTML = log.innerHTML + 'Data fetched...<br>';
+                log.innerHTML = log.innerHTML + 'Tracks fetched...<br>';
                 
                 data.items.forEach(element => {
                     tracks.push(element.track)
