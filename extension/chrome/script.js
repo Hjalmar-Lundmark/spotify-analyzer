@@ -22,6 +22,8 @@ document.getElementById('start').addEventListener('click', function() {
 
     let client_id = 
     let client_secret = 
+
+    log.innerHTML = log.innerHTML + 'Fetching token...<br>';
     
     fetch("https://accounts.spotify.com/api/token", {
         method: "POST",
