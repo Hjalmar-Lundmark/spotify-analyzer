@@ -1,0 +1,16 @@
+{
+    "name": "Spotify analyzer",
+    "description": "This extension will analyze your spotify playlist and give some info about songs release dates.",
+    "version": "1.0",
+    "manifest_version": 3,
+    "homepage_url": "https://github.com/Hjalmar-Lundmark/spotify-analyzer",
+    "icons": {
+        "48": "note.svg"
+    },
+    "permissions": ["activeTab", "tabs", "tabGroups"],
+    "action": {
+        "default_icon": "note.svg",
+        "default_popup": "analyze.html",
+        "default_title": "Spotify analyzer"
+    }
+}
