@@ -20,8 +20,8 @@ document.getElementById('start').addEventListener('click', function() {
     let token = ""
     let decades = []
 
-    let client_id = "fdfb8e83c1304c4f9b62937652c82970"
-    let client_secret = "dea4edef7ba44f79bd673867544af376"
+    let client_id = 
+    let client_secret = 
     
     fetch("https://accounts.spotify.com/api/token", {
         method: "POST",
