@@ -1,13 +1,12 @@
 let playlist_id = '';
 
 chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-    // since only one tab should be active and in the current window at once
-    // the return variable should only have one entry
-    //for (object in Object.keys(tabs[0])) {
-        log.innerHTML = log.innerHTML + tabs[0].url + '<br>';
-    //}
-    var activeTab = tabs[0];
-    var activeTabId = activeTab.id; // or do whatever you need
+    if (!tabs[0].url.includes('open.spotify.com/playlist')) {
+        document.getElementById('start').style.display = 'none';
+        document.getElementById('log').textContent = 'Please open a Spotify playlist';
+    } else {
+        playlist_id = tabs[0].url.split('playlist/')[1].split('?')[0];
+    }
 });
 
 document.getElementById('start').addEventListener('click', function() {
